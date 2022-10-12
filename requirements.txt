@@ -11,12 +11,13 @@ matplotlib >= 2.0.0
 sphinx >= 1.6.1
 numpydoc >= 0.8.0
 sphinx-bootstrap-theme >= 0.6
+importlib-metadata < 5
 sphinxcontrib-programoutput
 sphinx-automodapi
 ipython
 sphinx_rtd_theme
 coverage
 cpp-coveralls
-flake8 < 5
+flake8
 pytest
 pytest-cov
