@@ -251,6 +251,15 @@
              vk2 = vk*vk
           endif
 
+* If a massless remnant is produced then artificially set the kick to
+* a large value that will cause a disruption. This avoids infinite kicks
+* for prescriptions that scale with the mass of the remnant.
+* See Issue #687
+          if(m1n.le.0.d0)then
+             vk = 10000.d0
+             vk2 = vk * vk
+          endif
+
       endif
       sigma = sigmah
 
