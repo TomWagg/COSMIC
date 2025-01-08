@@ -320,7 +320,8 @@
 
 * Check if the system is already not a bound binary
       if((sn.eq.2.and.kick_info(1,2).eq.1)
-     &   .or.sep.le.0.or.ecc.lt.0)then
+     &   .or.sep.le.0.or.ecc.lt.0
+     &   .or.sep.ne.sep.or.ecc.ne.ecc)then
 * if so, only apply kick to the current star
          disrupt = .true.
          kick_info(sn,2) = 1
