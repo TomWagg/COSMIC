@@ -824,26 +824,30 @@
             {
                 "settings-section": "Natal kicks",
                 "name": "kickflag",
-                "description": "Sets the particular natal kick prescription to use. Note that <code class='docutils literal notranslate'><span class='pre'>sigmadiv</span></code>, <code class='docutils literal notranslate'><span class='pre'>bhflag</span></code>, <code class='docutils literal notranslate'><span class='pre'>bhsigmafrac</span></code>, <code class='docutils literal notranslate'><span class='pre'>aic</span></code>, and <code class='docutils literal notranslate'><span class='pre'>ussn</span></code>, which are described below, are only used when <code class='docutils literal notranslate'><span class='pre'>kickflag=0</span></code>",
+                "description": "Sets the particular natal kick prescription to use. Note that <code class='docutils literal notranslate'><span class='pre'>sigmadiv</span></code>, <code class='docutils literal notranslate'><span class='pre'>bhflag</span></code>, <code class='docutils literal notranslate'><span class='pre'>bhsigmafrac</span></code>, <code class='docutils literal notranslate'><span class='pre'>aic</span></code>, and <code class='docutils literal notranslate'><span class='pre'>ussn</span></code>, which are described below, are only used when <code class='docutils literal notranslate'><span class='pre'>abs(kickflag)=1</span></code>. Positive values use the Pfahl+2002 prescription for handling natal kicks.",
                 "type": "dropdown",
                 "options-preface": "",
                 "options": [
                     {
-                        "name": 0,
+                        "name": 1,
                         "description": "The standard COSMIC kick prescription, where kicks are drawn from a bimodal distribution with standard FeCCSN getting a kick drawn from a Maxwellian distribution with dispersion parameter <code class='docutils literal notranslate'><span class='pre'>sigma</span></code> and ECSN/USSN are drawn according to <code class='docutils literal notranslate'><span class='pre'>sigmadiv</span></code>. This setting has additional possible options for <code class='docutils literal notranslate'><span class='pre'>bhflag</span></code>, <code class='docutils literal notranslate'><span class='pre'>bhsigmafrac</span></code>, <code class='docutils literal notranslate'><span class='pre'>aic</span></code> and <code class='docutils literal notranslate'><span class='pre'>ussn</span></code>.",
                         "default": true
                     },
                     {
-                        "name": -1,
+                        "name": 2,
                         "description": "Natal kicks are drawn according to <code class='docutils literal notranslate'><span class='pre'>sigma</span></code> and scaled by the ejecta mass and remnant mass following Eq. 1 of <a class='reference external' href='https://ui.adsabs.harvard.edu/abs/2020ApJ...891..141G/abstract'>Giacobbo &amp; Mapelli 2020</a></p> with their default parameters (\\(m_{\\rm NS = 1.2 {\\rm M_\\odot}\\), \\(m_{\\rm ej = 9 {\\rm M_\\odot}\\))"
                     },
                     {
-                        "name": -2,
+                        "name": 3,
                         "description": "Natal kicks are drawn according to <code class='docutils literal notranslate'><span class='pre'>sigma</span></code> and scaled by just the ejecta mass following Eq. 2 of <a class='reference external' href='https://ui.adsabs.harvard.edu/abs/2020ApJ...891..141G/abstract'>Giacobbo &amp; Mapelli 2020</a>, which does not scale the kick by (\\(m_{\\rm NS\\)"
                     },
                     {
-                        "name": -3,
+                        "name": 4,
                         "description": "Natal kicks are drawn according to Eq. 1 of <a class='reference external' href='https://ui.adsabs.harvard.edu/abs/2016MNRAS.461.3747B/abstract'>Bray &amp; Eldridge 2016</a>, with their default parameters (\\(\\alpha=70 \\, {\\rm km/s}, \\beta = 120 \\, {\\rm km/s)}"
+                    },
+                    {
+                        "name": "negative values",
+                        "description": "Same as above settings but using the old Kiel & Hurley 2009 prescription for changing the orbital configuration of the binary, available for reproducibility purposes but not recommended for new work"
                     }
                 ]
             },
