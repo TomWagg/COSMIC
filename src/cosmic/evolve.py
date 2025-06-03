@@ -376,36 +376,39 @@ class Evolve(object):
             initial_conditions[i]["n_col_bcm"] = len(bcm_columns)
             initial_conditions[i]["col_inds_bcm"] = col_inds_bcm
 
-        # check if a pool was passed
-        if pool is None:
-            with MultiPool(processes=nproc) as pool:
-                # evolve systems
-                if n_per_block > 0:
-                    initial_conditions = np.asarray(initial_conditions)
-                    n_tot = initial_conditions.shape[0]
-                    initial_conditions_blocked = []
-                    itr_block = 0
-                    while itr_block < n_tot:
-                        itr_next = np.min([n_tot, itr_block+n_per_block])
-                        initial_conditions_blocked.append(initial_conditions[itr_block:itr_next])
-                        itr_block = itr_next
-                    output = list(pool.map(_evolve_multi_system, initial_conditions_blocked))
-                else:
-                    output = list(pool.map(_evolve_single_system, initial_conditions))
-        else:
-            # evolve systems
-            if n_per_block > 0:
-                initial_conditions = np.asarray(initial_conditions)
-                n_tot = initial_conditions.shape[0]
-                initial_conditions_blocked = []
-                itr_block = 0
-                while itr_block < n_tot:
-                    itr_next = np.min([n_tot, itr_block+n_per_block])
-                    initial_conditions_blocked.append(initial_conditions[itr_block:itr_next])
-                    itr_block = itr_next
+        # check if a pool was passed, if not and nproc > 1 then create a new pool
+        pool_was_passed = pool is not None
+        if not pool_was_passed and nproc > 1:
+            pool = MultiPool(processes=nproc)
+
+        # if user wants to evolve systems in blocks, pass multiple systems to the fortran
+        if n_per_block > 0:
+            initial_conditions = np.asarray(initial_conditions)
+            n_tot = initial_conditions.shape[0]
+            initial_conditions_blocked = []
+            itr_block = 0
+            while itr_block < n_tot:
+                itr_next = np.min([n_tot, itr_block+n_per_block])
+                initial_conditions_blocked.append(initial_conditions[itr_block:itr_next])
+                itr_block = itr_next
+
+            # use pool if available, otherwise just a for loop
+            if pool is not None:
                 output = list(pool.map(_evolve_multi_system, initial_conditions_blocked))
             else:
+                output = [_evolve_multi_system(f) for f in initial_conditions_blocked]
+        # otherwise evolve each system individually within the fortran
+        else:
+            # use pool if available, otherwise just a for loop
+            if pool is not None:
                 output = list(pool.map(_evolve_single_system, initial_conditions))
+            else:
+                output = [_evolve_single_system(f) for f in initial_conditions]
+
+        # if pool was not passed, then close it
+        if not pool_was_passed:
+            pool.close()
+            pool.join()
 
         output = np.array(output, dtype=object)
         bpp_arrays = np.vstack(output[:, 1])
