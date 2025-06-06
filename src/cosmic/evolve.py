@@ -406,7 +406,7 @@ class Evolve(object):
                 output = [_evolve_single_system(f) for f in initial_conditions]
 
         # if pool was not passed, then close it
-        if not pool_was_passed:
+        if not pool_was_passed and pool is not None:
             pool.close()
             pool.join()
 
